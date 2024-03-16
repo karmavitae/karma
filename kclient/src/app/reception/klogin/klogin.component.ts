@@ -1,0 +1,100 @@
+import { AsyncPipe, NgClass, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { Observable, Subscription } from 'rxjs';
+import { ResponsiveService } from '../../shared/services/responsive.service';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { UserService } from '../../shared/services/user.service';
+// import { KformErrorsComponent } from '../kform-errors/kform-errors.component';
+import e from 'express';
+import { Router } from '@angular/router';
+import { AuthService } from '../../shared/services/auth.service';
+import { KspinnerService } from '../../shared/utils/kspinner/kspinner.service';
+
+@Component({
+  selector: 'app-klogin',
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatFormFieldModule,
+    NgClass,
+    AsyncPipe,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+    // KformErrorsComponent,
+  ],
+  templateUrl: './klogin.component.html',
+  styleUrl: './klogin.component.scss'
+})
+export class KloginComponent implements OnDestroy {
+  isClient!:boolean
+  loginForm!:FormGroup
+  isPasswordShow!:boolean
+  isFormError!:boolean
+  isError!:boolean
+  isMobile!:Observable<boolean>
+  subscription!:Subscription
+  message!:string
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private fb: FormBuilder,
+    private responsive$: ResponsiveService,
+    private auth$: AuthService,
+    private user$: UserService,
+    private router: Router,
+    private kspinner$: KspinnerService
+  ) {
+    if(isPlatformBrowser(this.platformId)){
+      this.isClient=false
+    }
+    this.setLoginForm()
+    this.isMobile = this.responsive$.checkIsMobile()
+    this.clear()
+  }
+ 
+
+  submitCredentials() {
+    this.clear()
+    if(this.loginForm.valid) {
+      this.kspinner$.showSpinner()
+      this.subscription = this.auth$.login(
+        { username: this.loginForm.get('email')?.value, 
+          password: this.loginForm.get('password')?.value }
+        ).subscribe({
+          next: (response) => { 
+            this.router.navigate([this.user$.defaultLink])
+          },
+          error: (e) => { this.isError=true; this.message = e['message'] },
+        })
+    } else {
+      this.isFormError=true
+    }
+  }
+
+
+  setLoginForm() {
+    this.loginForm = this.fb.group({
+      email: new FormControl('',[Validators.required, Validators.email] ),
+      password: new FormControl('', [Validators.required])
+    })
+  }
+
+  clear() {
+    this.isFormError = false
+    this.isError = false 
+    this.message = ''
+  }
+
+  ngOnDestroy(): void {
+    // this.kspinner$.hideSpinner()
+    if(this.subscription){
+      this.subscription.unsubscribe()
+    }
+  }
+
+}

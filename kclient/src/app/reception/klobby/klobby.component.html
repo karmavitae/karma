@@ -1,0 +1,36 @@
+<mat-card  [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' " style="padding: 50px;" >
+        <div [ngClass]="(isMobile|async) ? 'banner-mobile' : 'banner-web' ">
+            <div [ngClass]="(isMobile|async) ? 'banner-text-mobile' : 'banner-text-web' ">
+                {{banner.name}}
+            </div>
+            <img src={{banner.img}} alt="" style="width: 250px">
+        </div>
+        <div>
+            Our Products
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'display-mobile' : 'display-web' " >
+                <div [ngClass]="(isMobile|async) ? 'sol-mobile' : 'sol-web' ">
+                    <button mat-flat-button 
+                        [ngClass]="(isMobile|async) ? 'service-btn-mobile' : 'service-btn-web' " 
+                        [style.color]="banner.color"
+                        [routerLink]="['pinfo']"
+                        > KV  Professional </button>
+                    <button mat-flat-button 
+                        [ngClass]="(isMobile|async) ? 'service-btn-mobile' : 'service-btn-web' "  
+                        [style.color]="banner.color"
+                        [routerLink]="['rinfo']"
+                        > 
+                        KV  Recruitment
+                    </button>
+                </div>
+            <div style="display: flex; flex-direction: column; align-items: center;"
+                [style.width]="(isMobile|async) ?  '100%' : '38%' " >
+                <div style="display: flex; flex-direction: column; align-items: center; width:auto;">
+                    <img src="assets/images/kv.png" [style.width]="(isMobile|async) ?  '80px' : '120px' " >
+                    <div [style.font-size]="(isMobile|async) ?  'small' : 'large' " >
+                    let your karma define you
+                    </div>
+                </div>
+            </div>  
+        </div>
+</mat-card>

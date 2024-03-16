@@ -1,0 +1,54 @@
+<mat-card  [formGroup]="form" [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-small-web' " >
+    <mat-card-header>
+        <mat-card-title style="font-size: x-large; margin-bottom: 30px;">Join</mat-card-title>
+      </mat-card-header>
+    <mat-card-content style="display: flex; flex-direction: column;">
+        <div style="margin-bottom: 30px;">
+            Our endeavour is to provide quality service to all. Therefore, 
+            we are onboaring members in phases to ensure seamless user experience.  
+            Please register with us by providing the information below and we will shortly send you an activation email. 
+            <br><br>
+            We look forward to welcome you very soon.
+
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'kflex-column' : 'kflex-row' ">
+            <mat-form-field [style.width]="(isMobile|async) ? '100%' : '48%'">
+                <mat-label>First Name</mat-label>
+                <input 
+                matInput 
+                formControlName="first_name"
+                (focus)="clear()"
+                required
+                type="text">
+            </mat-form-field>
+            <mat-form-field [style.width]="(isMobile|async) ? '100%' : '48%'">
+                <mat-label>Last Name</mat-label>
+                <input 
+                matInput 
+                formControlName="last_name"
+                (focus)="clear()"
+                required
+                type="text">
+            </mat-form-field>
+        </div>
+        <mat-form-field style="width: 100%;">
+            <mat-label>Email</mat-label>
+            <input 
+            matInput 
+            formControlName="email"
+            (focus)="clear()"
+            type="email">
+        </mat-form-field>
+        @if(isError){
+            <div class="error-message"> {{message}} </div>
+        }
+        @if(isOk){
+            <div class="error-message"> {{message}} </div>
+        }
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-flat-button color="primary" (click)="onSubmit()" mat-flat-button color="primary" style="width: 100px;">
+           Submit
+        </button>
+    </mat-card-actions>
+</mat-card>

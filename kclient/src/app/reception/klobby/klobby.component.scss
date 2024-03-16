@@ -1,0 +1,85 @@
+
+
+.solution-box{
+    font-size: x-large;
+    width: 250px;
+    height: 30px; 
+    line-height: 30px; 
+    text-align: left;
+    border-radius: 4px;
+  }
+
+
+  .display-mobile {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    gap: 25px;
+  }
+
+  .display-web {
+    margin-top: 20px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sol-web {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 60%;
+  }
+
+  .sol-mobile {
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .banner-web {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .banner-mobile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .banner-text-mobile {
+    font-size:25px; 
+    width: 100%;
+    line-height: 100%;
+  }
+
+  .banner-text-web {
+    font-size:45px; 
+    width:  100%;
+    line-height: 100%; 
+  }
+
+  .service-btn-web {
+    background-color: transparent;
+    height: 80px; 
+    width: 48%; 
+    font-size: large; 
+    font-weight: bold;
+    border: 1px solid;
+    cursor: pointer;
+  }
+
+  .service-btn-mobile {
+    background-color: transparent;
+    height: 40px; 
+    width: 150px; 
+    font-size: small; 
+    border: 1px solid;
+    cursor: pointer;
+  }

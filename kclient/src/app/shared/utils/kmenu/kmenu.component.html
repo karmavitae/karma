@@ -1,0 +1,60 @@
+<mat-toolbar color="primary">
+    <span>
+        <div style="display: flex; flex-direction: column; justify-content: center; cursor: pointer;" (click)="goHome()">
+            <!-- <img src="./assets/images/kv-full-logo-dark.png" [style.width]="(isMobile|async) ? '150px' : '200px' "> -->
+            @if(isDarkMode|async) { 
+                <img src="./assets/images/kv-full-logo-dark.png" 
+                [style.width]="(isMobile|async) ? '175px' : '300px' "
+                >
+            }@else {
+                <img src="./assets/images/kv-full-logo-light.png" 
+                [style.width]="(isMobile|async) ? '175px' : '300px' "
+                > }
+        </div>
+    </span>
+    <span style="flex: 1 1 auto"></span>
+        @if(kframe|async; as data){
+            @if(isMobile|async) {
+                <button mat-icon-button [matMenuTriggerFor]="menu" ><mat-icon>menu</mat-icon> </button>
+                <mat-menu #menu="matMenu" xPosition="before">
+                @for(item of data.menus ; track item) {
+                    <button mat-menu-item (click)="onSelection(item)" [disabled]="item.isActive"> 
+                        <span>{{item.name}}</span>
+                    </button>
+                }
+                </mat-menu>
+            }@else{
+                @for(item of data.menus; track item) {
+                    <button mat-button (click)="onSelection(item)" [disabled]="item.isActive" >{{item.name}}</button>    
+                }
+            }
+        
+            @if(data.actions) {
+                @if(data?.actions?.contextMenu){
+                    <button mat-icon-button [matMenuTriggerFor]="menu" ><mat-icon>account_circle</mat-icon> </button>
+                    <mat-menu #menu="matMenu" xPosition="before">
+                    @for(item of data.actions.contextMenu; track item; let first = $first) {
+                        @if(first){
+                            <div style="padding: 20px;">{{item.name}}</div>
+                            <mat-divider></mat-divider>
+                        }@else {
+                            <button mat-menu-item (click)="onAction(item)" > 
+                                <span>{{item.name}}</span>
+                            </button> 
+                        }
+                    }
+                    </mat-menu> 
+                }
+            }
+            @if(true){
+                <button mat-icon-button (click)="toggleTheme()">
+                    @if(isDarkMode|async) { <mat-icon>light_mode</mat-icon> 
+                    }@else { <mat-icon>dark_mode</mat-icon> }
+                </button>
+            }
+                
+        }
+    
+</mat-toolbar>
+
+
