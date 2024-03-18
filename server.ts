@@ -56,7 +56,7 @@ store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })
   
 
 server.get('/', async (req: Request, res: Response) => {
-    res.sendFile(path.join(buildFiles+'/index.html'));
+    res.sendFile(path.join('./dist/browser/index.html'));
 });
 
 server.get('*.*', express.static(buildFiles, {
@@ -64,7 +64,7 @@ server.get('*.*', express.static(buildFiles, {
   }));
 
 server.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(buildFiles+'/index.html'));
+    res.sendFile(path.join('./dist/browser/index.html'));
 });
 
 
