@@ -8,6 +8,8 @@ import session from 'express-session';
 import passport from 'passport';
 import mongoose, { ConnectOptions } from "mongoose";
 import path from 'path'
+import { fileURLToPath } from 'node:url';
+import { dirname, join, resolve } from 'node:path';
 
 const server: Express = express();
 
@@ -53,18 +55,17 @@ store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })
   server.use('/auth', AuthRoutes);
   server.use('/user', UserRoutes);
   server.use('/obj', ObjectRoutes);
-  
+
+server.use(express.static(__dirname + 'dist/browser'))  
 
 server.get('/', async (req: Request, res: Response) => {
-    res.sendFile(path.join('./dist/browser/index.html'));
+    res.sendFile(path.join(__dirname+ 'dist/browser/index.html'));
 });
 
-server.get('*.*', express.static(buildFiles, {
-    maxAge: '1y'
-  }));
+
 
 server.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join('./dist/browser/index.html'));
+    res.sendFile(path.join(__dirname+ 'dist/browser/index.html'));
 });
 
 
