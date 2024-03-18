@@ -1,0 +1,1 @@
+import"./chunk-FJ6WQ2RM.js";import"./chunk-MRA25AMI.js";import{Zb as r,ja as n}from"./chunk-6VALHPH7.js";var p=(()=>{let t=class t{};t.\u0275fac=function(o){return new(o||t)},t.\u0275cmp=n({type:t,selectors:[["app-kvr"]],standalone:!0,features:[r],decls:0,vars:0,template:function(o,i){}});let e=t;return e})();var d=[{path:"",component:p}];export{d as KvrRoutes};

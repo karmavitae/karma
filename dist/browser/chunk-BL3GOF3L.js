@@ -1,0 +1,1 @@
+import{Rb as a,Zb as p,ja as n,wb as r,xb as i}from"./chunk-6VALHPH7.js";var s=(()=>{let e=class e{};e.\u0275fac=function(o){return new(o||e)},e.\u0275cmp=n({type:e,selectors:[["app-kve"]],standalone:!0,features:[p],decls:2,vars:0,template:function(o,c){o&1&&(r(0,"p"),a(1,"kve works!"),i())}});let t=e;return t})();var u=[{path:"",component:s}];export{u as KveRoutes};
