@@ -66,32 +66,11 @@
                 cursor: pointer;" matTooltip="{{dobTip}}">Why do we need this?</div>
             </div>
         </div>
-        <div [ngClass]="(isMobile|async) ? 'row-mobile' : 'row-web' ">
-            <mat-form-field [style.width]="(isMobile|async)? '100%' : '49%'">
-                <mat-label>Password</mat-label>
-                <input matInput formControlName="password" type="password">
-                @if(form.get('password')?.hasError('required')){
-                    <mat-error>Password Required!</mat-error>
-                }
-                @if(form.get('password')?.hasError('minlength')){
-                    <mat-error>Password should be longer than 8 characters!</mat-error>
-                }
-                @if(form.get('password')?.hasError('maxlength')){
-                    <mat-error> Password can't be longer than 16 characters!</mat-error>
-    
-                }
-            </mat-form-field>
-            <mat-form-field [style.width]="(isMobile|async)? '100%' : '49%'">
-                <mat-label>Confirm Password</mat-label>
-                <input matInput formControlName="confirm_password" type="password">
-                @if(form.get('confirm_password')?.hasError('required')) {
-                    <mat-error>Passwordis confirmation is required!</mat-error>
-                }
-                @if(form.get('confirm_password')?.hasError('password_mismatch')) {
-                    <mat-error > The password doesn't match!</mat-error>
-                }
-            </mat-form-field>
-        </div>
+        <app-kpasswords 
+        formControlName = "password"
+        [isMobile]="(isMobile|async) || false"  
+        [markTouched]="markAllTouched" ></app-kpasswords>
+       
         <div class="flex-column" style="margin-top: 30px;" >
             Please approve and accept the below User Agreement and our Privacy and Cookie Policies
             <mat-checkbox  (change)="setEULA($event.checked)">Karma Vitae User Agreement</mat-checkbox>

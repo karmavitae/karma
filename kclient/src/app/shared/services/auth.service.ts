@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IS2S } from '../../../../../common/interfaces/igen';
 import { Observable, tap } from 'rxjs';
-import { IMenuFrame } from '../../../../../common/interfaces/imenu';
 import { Global } from '../classes/global';
 import { CacheService } from './cache.service';
 import { UserService } from './user.service';
+import { ILoginResult } from '../../../../../common/interfaces/ilogin'
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +18,14 @@ export class AuthService {
     private user$: UserService,
   ) { }
 
-  login(credentials:IS2S):Observable<IMenuFrame> {
-    return this.http.post<IMenuFrame>(Global.authUrl+'login', credentials).pipe(
-      tap((response:IMenuFrame)=>{
-        console.log(response)
-        this.cache$.setItem('menus', response)
-        this.user$.updateMenu(response)
+  login(credentials:IS2S):Observable<ILoginResult> {
+    return this.http.post<ILoginResult>(Global.authUrl+'login', credentials).pipe(
+      tap((response:ILoginResult)=>{
+        if(response.status === 200) {
+          this.cache$.setItem('menus', response.data)
+          this.cache$.setItem('uls', '1')
+          this.user$.updateMenu(response.data)
+        }
       })
     )
   } 
@@ -33,6 +35,7 @@ export class AuthService {
       tap((response:IS2S)=>{
         if(response['isLoggedOut']==='true'){
           this.cache$.clearCache(null)
+          this.cache$.removeItem('uls')
           this.user$.refreshMenu()
         }
       })

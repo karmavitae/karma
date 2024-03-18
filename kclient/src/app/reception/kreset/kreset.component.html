@@ -1,36 +1,29 @@
 <mat-card [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' " >
-    <mat-card-header>
-        <mat-card-title>Reset you password</mat-card-title>
-    </mat-card-header>
-    <div [formGroup]="form" class="row-mobile" >
-        <mat-form-field>
-            <mat-label>Password</mat-label>
-            <input matInput 
+    <div>Password Reset</div>
+    
+    @if(!isInitError) {
+        <div [formGroup]="form" class="row-mobile" >
+            <app-kpasswords 
             formControlName="password"
-            type="password">
-        </mat-form-field>
-        <mat-form-field>
-            <mat-label>Confirm Password</mat-label>
-            <input matInput 
-            formControlName="confirm_password"
-            type="password">
-        </mat-form-field>
-
-    </div>
-    <div>
-        @if(isError){
-            <div class="error-message">
-                {{message}}
-            </div>
-        }
-        @if(isInfo) {
-            <div class="info-message">
-                {{message}}
-            </div>
-        }
-    </div>
-    <mat-card-actions>
-        <button mat-flat-button color="accent" (click)="onSubmit()" >Submit</button>
-    </mat-card-actions>
+            [markTouched]="markAllTouched"
+            [isMobile]=" true " ></app-kpasswords>
+         </div>
+    }
+    @if(isError){
+        <div class="error-message">
+            {{message}}
+        </div>
+    }
+    @if(isInfo) {
+        <div class="info-message">
+            {{message}}
+        </div>
+    }
+    @if(!isError){
+        <mat-card-actions>
+            <button mat-flat-button color="accent" (click)="onSubmit()" >Submit</button>
+        </mat-card-actions>
+    }
+    
 
 </mat-card>

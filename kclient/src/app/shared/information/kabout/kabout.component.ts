@@ -39,7 +39,7 @@ export class KaboutComponent {
   ngOnInit() {
     this.article = this.activatedRoute.snapshot.data['article']
     if(!(this.article) || Object.keys(this.article).length === 0){
-      this.message = "disastrous"
+      this.message = "Unable to fetch the data at this time."
     }
      this.kspinner$.hideSpinner()
   }

@@ -1,9 +1,10 @@
-import express, { Request, Response, NextFunction } from "express"
+import express, { Request } from "express"
 import passport from "passport"
 import { Strategy as LocalStrategy } from "passport-local"
 import { getMenuItems } from "../services/MenuBuilder"
-import User from "../models/User"
 import { IUser } from "../../../common/interfaces/iuser"
+import { ILoginResult } from "../../../common/interfaces/ilogin"
+import { authenticateUser } from "../services/UserManager"
 
 const router = express.Router()
 
@@ -38,21 +39,24 @@ passport.authenticate('local', {
     failWithError: true }
   ), async (req:any, res:any, next:any) => {
       if(req.user) {
-        // req.login(req.user, function(err: any) { if (err) { return next(err); }});
-        res.status(200).json(getMenuItems(req.user.user_type, req.user.first_name + ' ' + req.user.last_name))
+        let result = {} as ILoginResult
+        result.status = 200
+        result.message = 'Successful'
+        result.data = getMenuItems(req.user.user_type, req.user.first_name + ' ' + req.user.last_name)
+        res.status(200).json(result)
       } else {
+        console.log('should never reach here!')
         res.status(401).json({message: 'Check your username or password'})
       }
       next()
    }, function(err:any, req:any, res:any, next:any) {
       req.session.destroy((err:any)=>{console.log(err)})
-      res.status(400).json({status: 401, message: err})
+      res.status(200).json({status: 401, message: err})
       next()
     }
 )
 
 router.post('/logout', function(req, res, next) {
-  // req.session.destroy(function(err) { if (err) { return next(err); }})
   req.logout(function(err) { if (err) { return next(err); }});
   res.status(200).json({isLoggedOut: "true"})
 })
@@ -62,16 +66,14 @@ req: Request, username: string,
 password: string, 
 done: (arg0: string | null, arg1: IUser | boolean, arg2: { message: string }) => any ) 
 {
-const user = await User.findOne(
-    {email: username}, 
-    {first_name: 1, last_name: 1, kv_id: 1, status: 1, user_type: 1})
-if(user) {
-    req.user = user
-    console.log("Information extracted: ", user)
-    return done(null, user, {message: "Authentication Successful"})
-} else {
-    return done( 'the new error', false, {message: "User does not exits"})
-}
+  const result = await authenticateUser(username, password)
+  if(result.status === 200){
+    req.user = result.data
+    return done(null, result.data, {message: "Authentication Successful"})
+  }
+  else {
+    return done( result.message , false, {message: "User does not exits"})
+  }
 }
 
 export default router

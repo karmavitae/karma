@@ -19,5 +19,7 @@ export class Global {
     ]
 
     public static chartColours=[ "#3410b3", "#4314eb", "#7b5bf1", "#b4a1f7", "#d9d0fb" ]
+
+    public static emailRegex= new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$')
     
 }

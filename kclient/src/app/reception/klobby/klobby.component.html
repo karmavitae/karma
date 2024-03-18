@@ -3,7 +3,7 @@
             <div [ngClass]="(isMobile|async) ? 'banner-text-mobile' : 'banner-text-web' ">
                 {{banner.name}}
             </div>
-            <img src={{banner.img}} alt="" style="width: 250px">
+            <img src={{banner.img}} alt="" style="width: 250px; ">
         </div>
         <div>
             Our Products
@@ -24,7 +24,7 @@
                     </button>
                 </div>
             <div style="display: flex; flex-direction: column; align-items: center;"
-                [style.width]="(isMobile|async) ?  '100%' : '38%' " >
+                [style.width]="(isMobile|async) ?  '100%' : '30%' " >
                 <div style="display: flex; flex-direction: column; align-items: center; width:auto;">
                     <img src="assets/images/kv.png" [style.width]="(isMobile|async) ?  '80px' : '120px' " >
                     <div [style.font-size]="(isMobile|async) ?  'small' : 'large' " >

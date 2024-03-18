@@ -12,7 +12,7 @@ export function mongoConnect() {
   } else {
     console.log('empty mongo URI')
   }
-    
+  return mongoose
 }
 
 // mongoose.connection.close()

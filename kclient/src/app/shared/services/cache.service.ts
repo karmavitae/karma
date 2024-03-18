@@ -9,7 +9,7 @@ export class CacheService {
   passPhrase!:string
 
   constructor() {
-    this.storageType = 1
+    this.storageType = 2
    }
 
   setItem(name:string, data:any):void {

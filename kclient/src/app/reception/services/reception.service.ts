@@ -37,7 +37,7 @@ export class ReceptionService {
     if(Object.keys(data).length > 0){
       switch(data.length){
         case 4:
-          return { activationCode: data[data.length-2], email: data[data.length-1] }
+          return { activationCode: data[data.length-2], email: data[data.length-1], postId: '' }
         case 5:
           return { activationCode: data[data.length-2], email: data[data.length-1], postId: data[data.length-3]  }
         default:

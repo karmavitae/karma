@@ -8,7 +8,7 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../shared/services/user.service';
-// import { KformErrorsComponent } from '../kform-errors/kform-errors.component';
+import { KformErrorsComponent } from '../../shared/utils/kform-errors/kform-errors.component';
 import e from 'express';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
@@ -29,8 +29,8 @@ import { KrecoverComponent } from '../krecover/krecover.component';
     MatButtonModule,
     MatIconModule,
     RouterLink,
-    KrecoverComponent
-    // KformErrorsComponent,
+    KrecoverComponent,
+    KformErrorsComponent,
   ],
   templateUrl: './klogin.component.html',
   styleUrl: './klogin.component.scss'
@@ -76,9 +76,19 @@ export class KloginComponent implements OnDestroy {
           password: this.loginForm.get('password')?.value }
         ).subscribe({
           next: (response) => { 
-            this.router.navigate([this.user$.defaultLink])
+            if(response.status === 200){
+              this.router.navigate([this.user$.defaultLink])
+            }else {
+              this.message = response.message
+              this.isError = true
+              this.kspinner$.hideSpinner()
+            }
           },
-          error: (e) => { this.isError=true; this.message = e['message'] },
+          error: (e) => { 
+            this.isError=true; 
+            this.message = e['message'] 
+            this.kspinner$.hideSpinner()
+          },
         })
     } else {
       this.isFormError=true
@@ -100,7 +110,6 @@ export class KloginComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // this.kspinner$.hideSpinner()
     if(this.subscription){
       this.subscription.unsubscribe()
     }

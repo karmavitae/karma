@@ -14,6 +14,7 @@ import { KsidenavComponent } from './shared/utils/ksidenav/ksidenav.component';
     RouterOutlet,
     KcontextMenuComponent,
     KmenuComponent,
+    KspinnerComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

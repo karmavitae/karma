@@ -28,7 +28,7 @@
                 <button mat-button (click)="loadRecovery()" > Forgot Password?</button>        
             </div>
             @if(isFormError) {
-                <!-- <app-kform-errors [form]="loginForm"></app-kform-errors> -->
+                <app-kform-errors [form]="loginForm"></app-kform-errors>
             }
             @if(isError) {
                 <div class="error-message">

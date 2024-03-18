@@ -8,10 +8,8 @@ import { KlobbyService } from './klobby.service';
 import { IQuote } from '../../../../../common/interfaces/iquote';
 import { MatButtonModule } from '@angular/material/button';
 import { KfooterComponent } from '../../shared/utils/kfooter/kfooter.component';
-import { response } from 'express';
 import { AuthService } from '../../shared/services/auth.service';
 import { UserService } from '../../shared/services/user.service';
-import { IS2S } from '../../../../../common/interfaces/igen';
 import { KspinnerService } from '../../shared/utils/kspinner/kspinner.service';
 import { KmenuComponent } from '../../shared/utils/kmenu/kmenu.component';
 
@@ -38,9 +36,6 @@ export class KlobbyComponent implements OnInit{
   constructor(
     private responsive$: ResponsiveService,
     private klobby$: KlobbyService,
-    private user$: UserService,
-    private auth$: AuthService,
-    private router: Router,
     private kspinner$: KspinnerService
   ) {
     this.isMobile = this.responsive$.checkIsMobile()

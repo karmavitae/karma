@@ -1,6 +1,6 @@
 import { IUser, IUserResult, IUserXs, IUserXsResult } from "../../../common/interfaces/iuser";
 import User from "../models/User";
-import { getCode } from "./SecretHandler";
+import { getCode, validate } from "./SecretHandler";
 import { send } from "./MailManager";
 import { encryptCode } from './SecretHandler'
 import crypto from 'crypto'
@@ -106,10 +106,12 @@ export async function resetPassword(email: string, password:string) {
     let user = await User.findOne({email: email})
     let result = {status:401, message: ''} as IResult
     if(user){
-        if(user.expires <= Date.now() && user.is_verified === false){
+        if(user.expires >= Date.now() && user.is_verified === false){
+            let password_digest = await encryptCode(password, 'password')
+            console.log('>>>>>>>>>>>', password_digest)
             try {
                 await User.updateOne({email: user.email}, {$set: {
-                    password_digest: encryptCode(password, 'password'),
+                    password_digest: password_digest,
                     is_verified: true,
                     verification_digest: '',
                     expires: 0
@@ -125,6 +127,22 @@ export async function resetPassword(email: string, password:string) {
         }
     }
     
+    return result
+    
+}
+
+export async function authenticateUser(email:string, password:string): Promise<IUserResult> {
+    let result = {status: 401, message: '', data: {} as IUser} as IUserResult
+    let user = await User.findOne({email: email}, {first_name: 1, last_name: 1, user_type: 1, password_digest: 1})
+    if(user && user.password_digest) {
+        let validationResult = await validate(password, user.password_digest, 'password')
+        result.message = validationResult.message
+        result.status = validationResult.status === 1 ? 200 : 401
+        result.data = validationResult.status === 1 ? user : {} as IUser
+    } 
+    else {
+        result.message = "Invalid Email or Password"
+    }
     return result
     
 }

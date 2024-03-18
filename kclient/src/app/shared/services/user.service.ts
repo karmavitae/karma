@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class UserService {
 
+
   defaultMenu:IMenuFrame = {
     menus: [
       { name: 'Sign in', link: 'login', contextMenu: []},
@@ -28,6 +29,11 @@ export class UserService {
     this.defaultLink = ''
     this.kframeMenu = new BehaviorSubject(this.loadMenu())
     this.getDefaultActiveMenu()
+  }
+
+  isUserLoggedIn(): boolean {
+    const token = this.cache$.getItem('uls');
+    return Object.keys(token).length > 0 ? true : false
   }
 
   getMenu():Observable<IMenuFrame> {

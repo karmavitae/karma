@@ -17,7 +17,7 @@ export const UserSchema: Schema = new Schema(
       city: String,
       country: String,
   
-      passwrod_digest: String,
+      password_digest: String,
       verification_digest: String,
       is_verified: { type: Boolean, default: false },
       verified_at: Date,

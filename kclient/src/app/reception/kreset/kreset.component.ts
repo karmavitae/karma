@@ -4,11 +4,13 @@ import { ResponsiveService } from '../../shared/services/responsive.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { ReceptionService } from '../services/reception.service';
+import { KpasswordsComponent } from '../../shared/utils/kpasswords/kpasswords.component';
+import { Global } from '../../shared/classes/global';
 
 @Component({
   selector: 'app-kreset',
@@ -21,7 +23,8 @@ import { ReceptionService } from '../services/reception.service';
     MatInputModule,
     ReactiveFormsModule,
     FormsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    KpasswordsComponent
   ],
   templateUrl: './kreset.component.html',
   styleUrl: './kreset.component.scss'
@@ -32,9 +35,12 @@ export class KresetComponent {
   email!: string
   isInfo!:boolean
   isError!:boolean
+  isInitError!:boolean
+
   message!:string
   activationCode!:string
   password!:string
+  markAllTouched!:boolean
 
   constructor(
     private responsive$: ResponsiveService,
@@ -43,18 +49,15 @@ export class KresetComponent {
     private reception$: ReceptionService
   ) {
     this.isMobile = this.responsive$.checkIsMobile()
-    this.email="dodo@dodo.com"
   }
 
   ngOnInit() {
     this.clear()
-    const { email, activationCode } = this.reception$.parseUrl(this.router.url)
-    if(email && activationCode) {
+    if(this.setData()) {
       this.setForm()
-      console.log(email, activationCode)
     }else {
-      this.isError=true
-      this.message="Invalid reset request data"
+      this.isInitError = true
+      this.isError = true
     }
   }
 
@@ -62,9 +65,48 @@ export class KresetComponent {
     this.clear()
     this.form.markAllAsTouched()
     if(this.form.valid){
-      this.reception$.reset({email: this.email, password: this.form.get('password')?.value}).subscribe({
+      this.submitData()
+    }
+  }
+
+  clear() {
+    this.isInitError=false
+    this.isError=false 
+    this.isInfo=false 
+    this.message=''
+  }
+  
+  setData(): boolean {
+    let isDataValid = true
+    let url = this.router.url
+    const { email, activationCode } = url ? this.reception$.parseUrl(url) : { email: '', activationCode: ''}
+    if( email && Global.emailRegex.test(email)) {
+      console.log(email)
+      this.email = email
+    } else {
+      isDataValid = false
+    } 
+    if( activationCode && activationCode.length>0) {
+      this.activationCode = activationCode
+    } else {
+      isDataValid = false
+    }
+    if(!isDataValid) {
+      this.message = "Invalid reset link"
+    }
+    return isDataValid
+  }
+
+  setForm() {
+    this.form = this.fb.group({
+      email: new FormControl(this.email, [Validators.required]),
+      password: new FormControl('', [Validators.required]),
+    })
+  }
+
+  submitData() {
+    this.reception$.reset({email: this.email, password: this.form.get('password')?.value}).subscribe({
         next: (response) => {
-          console.log(response)
           this.message = response.message
           if(response.status === 200) {
             this.isInfo = true
@@ -73,38 +115,6 @@ export class KresetComponent {
           }
         }
       })
-    }
-  }
-
-  clear() {
-    this.isError=false 
-    this.isInfo=false 
-    this.message=''
-  }
-
-  setForm() {
-    this.form = this.fb.group({
-      email: new FormControl(this.email, [Validators.required]),
-      password: new FormControl('', [Validators.required]),
-      confirm_password: new FormControl('', [Validators.required])
-    })
-    this.form.addValidators(
-      this.createCompareValidator(
-        this.form?.get('password') as FormControl,
-        this.form?.get('confirm_password') as FormControl
-      )
-     );
-  }
-
-  createCompareValidator(controlOne: AbstractControl, controlTwo: AbstractControl) {
-    return () => {
-      if (controlOne.value !== controlTwo.value){
-        controlTwo.setErrors({password_mismatch: true})
-        return { match_error: 'Value does not match' };
-      }else{
-        return null;
-      }
-    };
   }
 
 }
