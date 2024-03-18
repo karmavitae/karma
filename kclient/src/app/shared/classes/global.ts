@@ -1,5 +1,5 @@
 export class Global {
-    public static isProduction = true
+    public static isProduction = false
     public static url = 'https://www.karmavitae.com'
     public static apiUrl = Global.isProduction ? Global.url + '/api/' : '/api/'
     public static userUrl = Global.isProduction ? Global.url + '/user/' : '/user/'
