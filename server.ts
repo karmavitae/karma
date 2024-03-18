@@ -26,7 +26,7 @@ console.error('Error connecting to MongoDB:', err); });
 const store = new MongoDBStore({ uri: uri, collection: 'sessions' })
 store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })    
   
-  
+  console.log(__dirname+'/dist/browser/index.html')
   server.use(express.json())
   server.use(passport.initialize())
 
@@ -56,16 +56,16 @@ store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })
   server.use('/user', UserRoutes);
   server.use('/obj', ObjectRoutes);
 
-server.use(express.static(__dirname + 'dist/browser'))  
+server.use(express.static(__dirname + '/dist/browser'))  
 
 server.get('/', async (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname+ 'dist/browser/index.html'));
+    res.sendFile(path.join(__dirname+ '/dist/browser/index.html'));
 });
 
 
 
 server.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname+ 'dist/browser/index.html'));
+    res.sendFile(path.join(__dirname+ '/dist/browser/index.html'));
 });
 
 
