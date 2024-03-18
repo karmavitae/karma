@@ -10,9 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { UserService } from '../../shared/services/user.service';
 // import { KformErrorsComponent } from '../kform-errors/kform-errors.component';
 import e from 'express';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { KspinnerService } from '../../shared/utils/kspinner/kspinner.service';
+import { MatIconModule } from '@angular/material/icon';
+import { KrecoverComponent } from '../krecover/krecover.component';
 
 @Component({
   selector: 'app-klogin',
@@ -25,6 +27,9 @@ import { KspinnerService } from '../../shared/utils/kspinner/kspinner.service';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
+    MatIconModule,
+    RouterLink,
+    KrecoverComponent
     // KformErrorsComponent,
   ],
   templateUrl: './klogin.component.html',
@@ -32,6 +37,7 @@ import { KspinnerService } from '../../shared/utils/kspinner/kspinner.service';
 })
 export class KloginComponent implements OnDestroy {
   isClient!:boolean
+  isLogin:boolean = true 
   loginForm!:FormGroup
   isPasswordShow!:boolean
   isFormError!:boolean
@@ -39,6 +45,8 @@ export class KloginComponent implements OnDestroy {
   isMobile!:Observable<boolean>
   subscription!:Subscription
   message!:string
+  hidePassword!:boolean
+  email!:string
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -52,6 +60,7 @@ export class KloginComponent implements OnDestroy {
     if(isPlatformBrowser(this.platformId)){
       this.isClient=false
     }
+    this.hidePassword = true
     this.setLoginForm()
     this.isMobile = this.responsive$.checkIsMobile()
     this.clear()
@@ -94,6 +103,18 @@ export class KloginComponent implements OnDestroy {
     // this.kspinner$.hideSpinner()
     if(this.subscription){
       this.subscription.unsubscribe()
+    }
+  }
+
+  loadRecovery() {
+    if(this.loginForm.get('email')?.valid) {
+     this.email =this.loginForm.get('email')?.value
+     if(this.email && this.email.length>0) {
+        this.isLogin = false
+     }
+    }else {
+      this.message = 'Please provide valid email'
+      this.isError = true
     }
   }
 

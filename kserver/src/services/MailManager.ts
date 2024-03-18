@@ -1,6 +1,6 @@
 import * as mb from "./MessageBuilder";
 import { deliverMail} from "./MailDispatcher";
-import { IS2S } from '../../common/interfaces/igen'
+import { IS2S } from '../../../common/interfaces/igen'
 
 const title:IS2S = {
     "activation" : "Thank you for joining Karma Vitae community.",
@@ -26,22 +26,22 @@ export async function send(
                 break
             }
             case 1: { //Activation Email
-                message = mb.buildActivationMessgage(name, activationLink('activate/', activationToken))
+                message = mb.buildActivationMessgage(name, activationLink('activate/', activationToken, to))
                 subject = title['activation']
                 break
             }
             case 2: { //Talent Pool Activation
-                message = mb.buildTalentPoolMessage(name, recruiterName, recruiterMessage, activationLink('activate/', activationToken) )
+                message = mb.buildTalentPoolMessage(name, recruiterName, recruiterMessage, activationLink('activate/', activationToken, to) )
                 subject = "Karma Viate & " + recruiterName + title['talent_pool'] 
                 break
             }
             case 3: { //Invitation Message
-                message = mb.buildInvitationMessage(name, activationLink('activate/', activationToken))
+                message = mb.buildInvitationMessage(name, activationLink('activate/', activationToken, to))
                 subject = title['invite']
                 break
             }
             case 4: { //Password Reset
-                message = mb.buildResetMessge(name, activationLink('reset/', activationToken))
+                message = mb.buildResetMessge(name, activationLink('reset/', activationToken, to))
                 subject = title['reset']
                 break
             }
@@ -56,6 +56,6 @@ export async function send(
         return result
 }
 
-function activationLink(action:string, token:string):string{
-    return 'https://www.karmavitae.com/' + action  + token 
+function activationLink(action:string, token:string, email:string):string{
+    return 'https://www.karmavitae.com/' + action  + token + '/' + email.replace('@', '%40')
 }

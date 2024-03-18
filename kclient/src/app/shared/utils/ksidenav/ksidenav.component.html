@@ -1,0 +1,18 @@
+    <mat-toolbar color="accent"  style="height: 55px;" >
+        <div>
+            <div style="font-size: small; line-height: 110%;"> {{activeMenu.name}} </div> 
+            <div style="font-size: large; line-height: 110%;"> {{activeItem.name}} </div> 
+        </div>
+    </mat-toolbar>
+
+<mat-drawer-container 
+[dynamicHeight]="130"
+class="example-container">
+    <mat-drawer mode="side" opened>Drawer content</mat-drawer>
+    <mat-drawer-content>
+        <ng-content></ng-content>
+    </mat-drawer-content>
+</mat-drawer-container>
+
+
+  

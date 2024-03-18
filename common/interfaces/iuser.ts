@@ -1,3 +1,5 @@
+import { IResult } from "./igen"
+
 export interface IUser {
     _id: any
     first_name: string,
@@ -32,6 +34,11 @@ export interface IUserXs {
     email: string
 }
 
+
+export interface IUserXsResult extends IResult{
+    data: IUserXs
+}
+
 export interface IUserRegistrationResponse {
     status: number 
     message: string
@@ -48,4 +55,9 @@ export interface IKSummary {
 
 export interface INetwork {
     _id: any
+}
+
+
+export interface IUserResult extends IResult {
+    data: IUser
 }

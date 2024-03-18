@@ -18,7 +18,7 @@ import { ResponsiveService } from '../../services/responsive.service';
 export class KfooterComponent {
 
   @Input('isSticky') isSticky!:boolean
-  isMobile!:Observable<boolean>
+  isMobile!:Observable<boolean> 
 
   constructor(
     private responsive$: ResponsiveService

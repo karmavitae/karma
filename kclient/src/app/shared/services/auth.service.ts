@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IS2S } from '../../../../../common/interfaces/igen';
 import { Observable, tap } from 'rxjs';
 import { IMenuFrame } from '../../../../../common/interfaces/imenu';
 import { Global } from '../classes/global';
 import { CacheService } from './cache.service';
 import { UserService } from './user.service';
-import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +21,7 @@ export class AuthService {
   login(credentials:IS2S):Observable<IMenuFrame> {
     return this.http.post<IMenuFrame>(Global.authUrl+'login', credentials).pipe(
       tap((response:IMenuFrame)=>{
+        console.log(response)
         this.cache$.setItem('menus', response)
         this.user$.updateMenu(response)
       })
@@ -32,7 +32,7 @@ export class AuthService {
     return this.http.post<IS2S>(Global.authUrl+'logout', {}).pipe(
       tap((response:IS2S)=>{
         if(response['isLoggedOut']==='true'){
-          this.cache$.removeItem('menus')
+          this.cache$.clearCache(null)
           this.user$.refreshMenu()
         }
       })

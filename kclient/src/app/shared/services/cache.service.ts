@@ -68,7 +68,7 @@ export class CacheService {
         sessionStorage.clear() 
         break
       default:
-        sessionStorage.clear() 
+        sessionStorage.clear()
         localStorage.clear()
         break;
     }

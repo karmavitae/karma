@@ -1,0 +1,113 @@
+<mat-card [formGroup]="form" [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' ">
+    @if(isUserError){
+        <div class="error-message" style="font-size: large;">
+            {{message}}
+        </div>
+    }
+    @else {
+    <mat-card-header>
+        <mat-card-title>
+            Welcome {{form.get('first_name')?.value}}
+        </mat-card-title>
+        <mat-card-subtitle>
+           Please verify your information below and update the required fields. 
+        </mat-card-subtitle>
+    </mat-card-header>
+   
+        <mat-card-content style="margin-top: 30px;">
+            <div [ngClass]="(isMobile|async) ? 'row-mobile' : 'row-web' " >
+                <mat-form-field [style.width]="(isMobile|async) ? '100%' : '49%'">
+                    <mat-label>First Name</mat-label>
+                    <input matInput formControlName="first_name" type="text">
+                </mat-form-field>
+                <mat-form-field [style.width]="(isMobile|async) ? '100%' : '49%'">
+                    <mat-label>Last Name</mat-label>
+                    <input matInput formControlName="last_name" type="text">
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field style="width: 100%;">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" type="email">
+                </mat-form-field>
+                <div [ngClass]="(isMobile|async) ? 'row-mobile' : 'row-web' " >
+                    <mat-form-field [style.width]="(isMobile|async)? '100%' : '49%'">
+                        <mat-label>City</mat-label>
+                        <input matInput formControlName="city" type="text">
+                    </mat-form-field>
+                    <!-- <karma-item-autocomplete 
+                    [style.width]="isMobile? '100%' : '49%'"
+                    [optionsFor]="1"
+                    formControlName="country">
+                </karma-item-autocomplete> -->
+                </div>
+            </div>
+        <div [ngClass]="(isMobile|async) ? 'row-mobile' : 'row-web' " style="width: 100%;">
+            <mat-form-field [style.width]="(isMobile|async) ? '100%' : '49%'">
+                <mat-label>Mobile</mat-label>
+                <input matInput formControlName="mobile" type="text">
+            </mat-form-field>
+            <div class="row-web" [style.width]="(isMobile|async) ? '100%' : '49%'">
+                <mat-form-field style="width: 75%;" >
+                    <mat-label>Date of Birth</mat-label>
+                    <input matInput formControlName="date_of_birth" [matDatepicker]="picker">
+                    <mat-datepicker-toggle matIconSuffix [for]="picker">
+                        <mat-icon matDatepickerToggleIcon>keyboard_arrow_down</mat-icon>
+                    </mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    @if(form.get('date_of_birth')?.hasError('required')){
+                        <mat-error >Date of birth is requred! </mat-error>
+                    }
+                </mat-form-field>
+                <div 
+                style="width: 20%;
+                font-size: small; line-height:1;
+                padding-top: 10px;
+                cursor: pointer;" matTooltip="{{dobTip}}">Why do we need this?</div>
+            </div>
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'row-mobile' : 'row-web' ">
+            <mat-form-field [style.width]="(isMobile|async)? '100%' : '49%'">
+                <mat-label>Password</mat-label>
+                <input matInput formControlName="password" type="password">
+                @if(form.get('password')?.hasError('required')){
+                    <mat-error>Password Required!</mat-error>
+                }
+                @if(form.get('password')?.hasError('minlength')){
+                    <mat-error>Password should be longer than 8 characters!</mat-error>
+                }
+                @if(form.get('password')?.hasError('maxlength')){
+                    <mat-error> Password can't be longer than 16 characters!</mat-error>
+    
+                }
+            </mat-form-field>
+            <mat-form-field [style.width]="(isMobile|async)? '100%' : '49%'">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput formControlName="confirm_password" type="password">
+                @if(form.get('confirm_password')?.hasError('required')) {
+                    <mat-error>Passwordis confirmation is required!</mat-error>
+                }
+                @if(form.get('confirm_password')?.hasError('password_mismatch')) {
+                    <mat-error > The password doesn't match!</mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <div class="flex-column" style="margin-top: 30px;" >
+            Please approve and accept the below User Agreement and our Privacy and Cookie Policies
+            <mat-checkbox  (change)="setEULA($event.checked)">Karma Vitae User Agreement</mat-checkbox>
+            <mat-checkbox  (change)="setPDP($event.checked)">Privacy and Cookie Policy</mat-checkbox>
+            @if(!isPcpSigned){
+                <div class="error-message">To activate your account you must accept the Privacy and Cookie Policy</div>    
+            }
+            @if(!isUaSigned){
+                <div class="error-message">To activate your account you must accept the User Agreement</div>    
+        
+            }
+        </div>
+        <div style="margin-top: 30px;">
+            <button mat-flat-button color="accent" (click)="submit()">Activate</button>
+        </div>
+        </mat-card-content>
+    }
+   
+</mat-card>

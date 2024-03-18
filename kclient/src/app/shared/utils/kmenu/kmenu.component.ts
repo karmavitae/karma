@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar'
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon'
-import { Observable, Subscription } from 'rxjs'
-import { AsyncPipe } from '@angular/common';
+import { Observable, Subscription, filter } from 'rxjs'
+import { AsyncPipe, Location } from '@angular/common';
 import { IMenuFrame, IMenu } from '../../../../../../common/interfaces/imenu'
 import { ThemeService } from '../../services/theme.service';
 import { MatMenuModule } from '@angular/material/menu'
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, ResolveEnd, Router, RouterLink } from '@angular/router';
 import { ResponsiveService } from '../../services/responsive.service'
 import { UserService } from '../../services/user.service'
 import { MatDividerModule } from '@angular/material/divider';
@@ -31,6 +31,8 @@ import { IS2S } from '../../../../../../common/interfaces/igen';
   styleUrl: './kmenu.component.scss'
 })
 export class KmenuComponent implements OnInit, OnDestroy{
+  @Output('onMenuSelection') onMenuSelection: EventEmitter<IMenu> = new EventEmitter()
+
   kframe!:Observable<IMenuFrame>
   actionMenu!:Observable<IMenu[]>
   isMobile!:Observable<boolean>
@@ -52,6 +54,11 @@ export class KmenuComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
+    this.router.events.subscribe((routerData) => {
+      if(routerData instanceof ResolveEnd){ 
+        this.user$.findAndSetActiveMenu(routerData.url)
+    } 
+})
       this.kframe = this.user$.getMenu()
       this.isDarkMode = this.theme$.getActiveTheme()
       this.isMobile = this.responsive$.checkIsMobile()
@@ -62,7 +69,6 @@ export class KmenuComponent implements OnInit, OnDestroy{
   }
 
   onSelection(menu:IMenu){
-    this.user$.setActiveMenu(menu)
     this.router.navigate([menu.link])
   }
 
@@ -81,7 +87,7 @@ export class KmenuComponent implements OnInit, OnDestroy{
   }
 
   goHome() {
-    this.onSelection({name: 'home', link: '', contextMenu: []})
+    this.onSelection({name: 'home', link: '/', contextMenu: []})
   }
 
   disableMenu(index:number) {}

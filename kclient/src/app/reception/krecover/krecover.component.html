@@ -1,0 +1,38 @@
+
+<mat-card [formGroup]="recoveryForm" [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-small-web' " >
+    <mat-card-header>
+        <mat-card-title style="font-size: x-large; margin-bottom: 30px;">Recover Password</mat-card-title>
+      </mat-card-header>
+    <mat-card-content style="display: flex; flex-direction: column;">
+        <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input 
+            (focus)="clear()"
+            matInput 
+            formControlName="email"
+            type="email" required>
+        </mat-form-field>
+        <div style="margin: 20px;">
+            @if(isFormError) {
+                <!-- <app-kform-errors [form]="loginForm"></app-kform-errors> -->
+            }
+            @if(isError) {
+                <div class="error-message">
+                    {{message}}
+                </div>
+            }
+            @if(isInfo) {
+                <div>
+                    {{message}}
+                </div>
+            }
+        </div>
+
+        <button (click)="submitRecoveryRequest()" mat-flat-button color="accent" style="width: 200px;">
+            Recover Password
+        </button>
+       
+    </mat-card-content>
+  
+</mat-card>
+

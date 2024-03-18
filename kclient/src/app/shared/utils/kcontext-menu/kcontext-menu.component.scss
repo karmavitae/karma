@@ -1,0 +1,87 @@
+
+.sidemenu-container-web {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: transparent;
+  }
+    
+  .sidemenu-container-mobile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: transparent;
+  }
+    
+  .toolbar-items-mobile {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+  
+  }
+  
+  .toolbar-items-web {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 25px;
+  }
+  
+  .menu-drawer-mobile {
+      width: auto;
+      padding-right: 20px;
+  }
+  
+  .menu-drawer-web {
+      width: 250px;
+      background-color: transparent;
+  }
+  
+  .menu-title-web {
+      padding-left: 15px;
+      font-size: large;
+      height: 50px;
+      line-height: 50px;
+  }
+  
+  .menu-title-mobile {
+      padding-left: 15px;
+      height: 50px;
+      line-height: 50px;
+  }
+  
+  
+  .menu-tree{
+      margin-top: 60px;
+      background-color: transparent;
+  }
+  
+    .menu-tree-invisible {
+      display: none;
+    }
+    
+    
+   
+    .menu-tree .mat-nested-tree-node div[role=group] {
+      padding-left: 0px;
+    }
+    
+    .menu-tree div[role=group] > .mat-tree-node {
+      padding-left: 20px;
+    }
+  
+
+.list-item {
+    font-size: medium;
+    padding-left: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+}
+.list-item-parent {
+    display: flex; 
+    flex-direction: row; 
+    width: 100%;
+    justify-content: space-between;
+   align-items: center
+}
+    

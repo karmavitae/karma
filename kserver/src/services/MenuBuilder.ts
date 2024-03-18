@@ -1,4 +1,4 @@
-import { IContextMenuItem, IMenu, IMenuFrame } from '../../common/interfaces/imenu'
+import { IContextMenuItem, IMenu, IMenuFrame } from '../../../common/interfaces/imenu'
 
 const reception:IMenu[] = [
     { name: 'Join', link: 'join', contextMenu: []},
@@ -7,20 +7,20 @@ const reception:IMenu[] = [
 
 const userProfile:IMenu = {
     name: 'Account', link: 'Account', contextMenu: [
-        {label: "Settings and Privacy", name: 'Settings and Privacy', link: '/settings'},
-        {label: "Preferences", name: 'Preferences', link: '/preferences'},
-        {label: "Sign Out", name: 'Sign Out', link: '/logout'},
+        {label: "Settings and Privacy", name: 'Settings and Privacy', link: 'settings'},
+        {label: "Preferences", name: 'Preferences', link: 'preferences'},
+        {label: "Sign Out", name: 'Sign Out', link: 'logout'},
     ]
 }
 
 
 const kvp:IMenu = 
     { name: 'KV Professional', link: 'kvp', contextMenu: [
-        {label: 'Karma Arena', name: 'Karma Arena', link: 'kvp', sub: [] },
+        {label: 'Karma Arena', name: 'Karma Arena', link: 'kvp/arena', sub: [] },
         {label: 'Profile', name: 'Profile', link: 'kvp/profile', sub: []},
         {label: 'Post', name: 'Posts', link: 'n/a', sub: [ 
-            {label: 'Posts/Inbox', name: 'Inbox', link: 'kvp/inbox'}, 
-            {label: 'Posts/Sent' ,name: 'Sent', link: 'kvp/sent'} ]},
+            {label: 'Posts/Inbox', name: 'Inbox', link: 'kvp/posts'}, 
+            {label: 'Posts/Sent' ,name: 'Sent', link: 'kvp/requests'} ]},
         {label: 'Network', name: 'Network', link: 'kvp/networks', sub: []},
     ]
     }
@@ -33,22 +33,22 @@ const kvr:IMenu = { name: 'Recruitment', link: 'kvr', contextMenu:   [
           {label: 'My Organization/Departments', name: 'Departments', link: 'kvr/user'},
         ]},
         {label: 'Talent Pool', name: 'Talent Pool', link: 'kvr/posts', sub: []},
-        {label: 'Jobs', name: 'Jobs', link: 'kvp/jobs', sub: []}
+        {label: 'Jobs', name: 'Jobs', link: 'kvr/jobs', sub: []}
       ]
     }
 
 
 const kve:IMenu = { name: 'Enterpirse', link: 'kve', contextMenu: [
         {label: 'Dashboard', name: 'Dashboard', link: 'kve', sub: []},
-        {label: 'Talent Capital', name: 'Talent Capital', link: 'kvp/capital', sub: []},
+        {label: 'Talent Capital', name: 'Talent Capital', link: 'kve/capital', sub: []},
       ]
     }
 
 
-const kva:IMenu = { name: 'Administrator', link: 'kva', contextMenu: [
+const kva:IMenu = { name: 'Administrator', link: 'kva', isActive: true, contextMenu: [
         {label: 'Dashboard', name: 'Dashboard', link: 'kva', sub: []},
         {label: 'Users', name: 'Users', link: 'kva/users', sub: []},
-        {label: 'Services', name: 'Services', link: 'kvp/services', sub: []},
+        {label: 'Services', name: 'Services', link: 'kva/services', sub: []},
       ]
     }
 

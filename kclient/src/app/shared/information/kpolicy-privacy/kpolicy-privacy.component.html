@@ -1,0 +1,4 @@
+<mat-card  [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' " style="padding: 50px;" >
+    <app-kapproval [approvalFor]="'privacy'"></app-kapproval>
+</mat-card>
+<app-kfooter [isSticky]="true" ></app-kfooter>

@@ -1,4 +1,4 @@
-import { IArticle, IArticles } from "../../common/interfaces/iarticle"
+import { IArticle, IArticles } from "../../../common/interfaces/iarticle"
 
 const articles:IArticles = {
     "kvp" : {

@@ -1,0 +1,119 @@
+    <mat-card  [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' " >
+        <div [ngClass]="(isMobile|async) ? 'kv-h1-mobile' : 'kv-h1-web' ">
+            <div><span>Shashi Thakur</span></div>
+            <div>
+                @if(!(isDarkMode|async)){
+                    <img src="assets/images/kv-full-logo-light.png" style="width: 200px;">
+                }@else {
+
+                    <img src="assets/images/kv-full-logo-dark.png" style="width: 200px;">
+                }
+            </div>
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'kv-summary-mobile' : 'kv-summary-web' " >
+            <app-kcircular-bar 
+            [title]="'Potential'"
+            [data]="kp.potential"
+            [isEnable]="kp.isEnable"
+            [chartFor]="'Potential'"
+            [style.width]="(isMobile|async) ? 'auto' : '33%' "
+            style="border: 1px solid #eeeeee;"
+            ></app-kcircular-bar>
+            <app-kcircular-bar
+            [title]="'Abilities'"
+            [data]="kp.abilities" 
+            [isEnable]="kp.isEnable"
+            [chartFor]="'Abilities'"
+            [style.width]="(isMobile|async) ? 'auto' : '33%' "
+            style="border: 1px solid #eeeeee;"
+            ></app-kcircular-bar>
+            <app-kcircular-bar 
+            [title]="'Personalities'"
+            [data]="kp.personalities"
+            [isEnable]="kp.isEnable"
+            [chartFor]="'Personalities'"
+            [style.width]="(isMobile|async) ? 'auto' : '33%' "
+            style="border: 1px solid #eeeeee;"
+            ></app-kcircular-bar>
+        </div>
+        @if(isMobile|async){
+            <div class="kvp-row-mobile" style="border: 1px solid #eeeeee;" >
+                <div style="padding-left: 20px; padding-top: 15px;line-height: 100%;">Proficiencies</div>
+                <div style="padding-left: 20px; padding-top: 10px;">
+                    <app-ktalent-matrix-mobile  [legendCount]="kp.talent_matrix" ></app-ktalent-matrix-mobile>
+                </div>
+            </div>
+        }@else {
+            <div class="kv-matrix-web" >
+                <div style="padding-left: 20px; padding-top: 15px;line-height: 100%;">Proficiencies</div>
+                <div style="padding-left: 20px;">
+                    <app-ktalent-matrix-web  [legendCount]="kp.talent_matrix"  ></app-ktalent-matrix-web>
+                </div>
+            </div>
+        }
+        <div [ngClass]="(isMobile|async) ? 'kv-proficiencies-mobile' : 'kv-proficiencies-web' " >
+            <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.domains || []" 
+                [title]="'Knowledge domains'" ></app-kproficiencies-list>
+          <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.competencies || []" 
+                [title]="'Competencies'" ></app-kproficiencies-list>
+            <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.technologies || []" 
+                [title]="'Technologies'" ></app-kproficiencies-list>
+        </div>
+         <div [ngClass]="(isMobile|async) ? 'kv-proficiencies-mobile' : 'kv-proficiencies-web' " >
+            <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.skills || []" 
+                [title]="'Skills'" ></app-kproficiencies-list>
+            <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.personal_attributes || []" 
+                [title]="'Personal Attributes'" ></app-kproficiencies-list>
+            <app-kproficiencies-list 
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [proficiencies]="kp?.tasks || []" 
+                [title]="'Tasks'" ></app-kproficiencies-list>
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'kv-hours-mobile' : 'kv-hours-web' " >
+            @if(isMobile|async){
+                <app-khorizontal-bars
+                [isSmall]="true"
+                [sumKey]="'Total'"
+                [title]="'Hours'" [data]="kp.hours" ></app-khorizontal-bars>
+
+            }@else {
+                <app-khorizontal-bar 
+                [hoursSummary]="kp.hours" [sumKey]="'Total'" ></app-khorizontal-bar>
+            }
+           
+        </div>
+        <div [ngClass]="(isMobile|async) ? 'kv-learning-mobile' : 'kv-learning-web' " >
+            <app-kjourneys
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [category]="1"
+                [lifeActivities]="kp?.journeys['learning']"></app-kjourneys>
+            <app-kjourneys
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [category]="2"
+                [lifeActivities]="kp?.journeys['cpd']" ></app-kjourneys>
+            <app-kjourneys
+                [style.width]="(isMobile|async) ? '100%' : '33%' "
+                style="border: 1px solid #eeeeee;"
+                [category]="3"
+                [lifeActivities]="kp?.journeys['voluntary']" ></app-kjourneys>
+        </div>
+        
+    </mat-card> 

@@ -1,5 +1,5 @@
 import * as msg from './MessageData'
-import { IS2S } from '../../common/interfaces/igen'
+import { IS2S } from '../../../common/interfaces/igen'
 
 const title:IS2S = {
     "activation" : "Thank you for joining Karma Vitae community.",

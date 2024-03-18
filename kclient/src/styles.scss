@@ -221,3 +221,18 @@ h2 {
   border-radius: 10px;
   border: 1px solid #eeeeee;
 }
+
+
+.row-mobile {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  gap: 10px;
+}
+
+.row-web {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%
+}

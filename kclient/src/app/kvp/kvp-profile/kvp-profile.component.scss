@@ -1,0 +1,78 @@
+.kv-h1-web{
+    display: flex;
+    width: auto;
+    flex-direction: row;
+    align-items:center;
+    padding-left: 15px;
+    padding-right: 15px;
+    justify-content: space-between;
+    border: 1px solid #eeeeee;
+    height: 50px;
+}
+
+.kv-h1-mobile{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    align-items:center;
+    border: 1px solid #eeeeee;
+}
+
+.kv-summary-web{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 300px;
+}
+.kv-summary-mobile{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.kv-matrix-web {
+    border: 1px solid #eeeeee;
+    font-size: 12pt;
+    height: 110px;
+    line-height: 45px;
+}
+
+.kv-matrix-mobile {
+    border: 1px solid #eeeeee;
+}
+
+.kv-proficiencies-web{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 230px;
+}
+.kv-proficiencies-mobile{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+
+.kv-hours-web{
+    padding-bottom: 10px;
+    border: 1px solid #eeeeee;
+    height: 70px;
+}
+.kv-hours-mobile{
+    border: 1px solid #eeeeee;
+    padding-left: 15px;
+}
+
+.kv-learning-web{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 1px;
+    height: 270px;
+}
+.kv-learning-mobile{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}

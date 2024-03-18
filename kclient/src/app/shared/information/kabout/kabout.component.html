@@ -1,0 +1,4 @@
+<mat-card  [ngClass]="(isMobile|async) ? 'card-mobile' : 'card-web' "  >
+    <div> {{message}} </div>
+    <app-kinfo [article]="article"></app-kinfo>
+</mat-card>

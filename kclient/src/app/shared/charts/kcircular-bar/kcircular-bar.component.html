@@ -1,0 +1,57 @@
+<svg style="width: 100%;"
+    viewBox="0 0 346 370" 
+>   
+    <filter id="blurFilter">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" />
+    </filter>
+    @if(displayData){
+        @for(d of displayData; track d; let i= $index){
+        <g>
+            <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " text-anchor="end" x="173" y="40" font-size="18">{{title}}</text>
+            <g [style.filter]="isEnable ? 'none' : 'url(#blurFilter)' ">
+                <text font-size="13" [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " text-anchor="end" [attr.x]="textX" [attr.y]="d.textY">{{d.name}}</text>
+                <path
+                style="fill:none;"
+                [attr.stroke-width]="barWidth"
+                [attr.stroke]="d.color"
+                [attr.d]="d.circleBar"
+                />
+                @if(chartFor==='Potential'){
+                    <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " 
+                    [attr.x]="25" 
+                    [attr.y]="315 + (i*20)"  
+                    font-size="18" >{{d.score+' '+ d.name }} </text>   
+                }
+                @else{
+                    <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " 
+                    [attr.x]="25" 
+                    [attr.y]="315 + (i*20)" 
+                    font-size="18">{{d.score+'% '+ d.name }} </text>   
+                }
+            </g>
+        </g>
+        }
+        @if(chartFor==='Potential'){
+            <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " 
+            [attr.x]="25" y="280" 
+            font-size="13">Proficiencies Breakdown:</text>   
+        }
+        @else{
+            <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' " 
+            [attr.x]="25" y="280" 
+            font-size="13">Experience to {{title}} Association:</text>   
+        }
+       @if(!isEnable) {
+            <rect x="0" y ="0" width="346" height="370" fill="#777777" fill-opacity=".50" ></rect>
+            <text x="173" y="270" [attr.fill]="'#fff'" text-anchor="middle" font-size="20">{{title}} insight</text>
+            <text x="173" y="290" [attr.fill]="'#fff'" text-anchor="middle" font-size="20">will unlock once you a  </text>
+            <text x="173" y="310" [attr.fill]="'#fff'" text-anchor="middle" font-size="20">verified experience and </text>
+            <text x="173" y="330" [attr.fill]="'#fff'" text-anchor="middle" font-size="20">minimum five endorsements </text>
+            <text x="173" y="350" [attr.fill]="'#fff'" text-anchor="middle" font-size="20">Further details in our FAQs </text>
+        } 
+    }           
+</svg>
+
+
+
+

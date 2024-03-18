@@ -1,0 +1,13 @@
+<p>khorizontal-bars works!</p><svg  [attr.viewBox]="viewBox">
+    <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' "  [attr.x]="startX" y="40" text-anchor="start" font-size="24">{{title}}</text>
+    @for(d of bars; track d){
+        <text [attr.fill]="(isDarkMode|async) ? '#ffffff' : '#000000' "  [attr.x]="startX" [attr.y]="d.nameY" text-anchor="start" font-size="16">{{d.name}}</text>
+        <rect x="40" [attr.y]="d.rectY-1" width="412" height="26" rx="12" ry="12" 
+			style="fill: #dad5d4"
+		/>
+		<path [attr.d]="d.path" 
+			style="fill: #6f0bff"
+		/>
+		<text [attr.x]="startX+7" [attr.y]="d.nameY+26" style="fill: white" font-size="14" >{{d.value}}</text>
+    }
+</svg>
