@@ -18,12 +18,14 @@
         <div class="info-message">
             {{message}}
         </div>
+        <mat-card-actions>
+            <button mat-flat-button color="accent" (click)="onLogin()" >Go to Login</button>
+        </mat-card-actions>
     }
-    @if(!isError){
+    @if(!isError && !isInfo){
         <mat-card-actions>
             <button mat-flat-button color="accent" (click)="onSubmit()" >Submit</button>
         </mat-card-actions>
     }
     
-
 </mat-card>

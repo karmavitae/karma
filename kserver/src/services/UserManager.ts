@@ -88,7 +88,7 @@ export async function requestPasswordReset(email: string): Promise<IResult> {
             try{
                 await u.save()
                 await send(u.email, u.first_name, 4 , "", "", verificationCode)
-                result = { status: 200, message: "Reset successful!"}
+                result = { status: 200, message: "We have sent you password reset link to your registered email address."}
             }catch (error:any) {
                 result = { status: 401, message: "Server Error"} 
             }

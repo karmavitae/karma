@@ -81,7 +81,6 @@ export class KresetComponent {
     let url = this.router.url
     const { email, activationCode } = url ? this.reception$.parseUrl(url) : { email: '', activationCode: ''}
     if( email && Global.emailRegex.test(email)) {
-      console.log(email)
       this.email = email
     } else {
       isDataValid = false
@@ -102,6 +101,10 @@ export class KresetComponent {
       email: new FormControl(this.email, [Validators.required]),
       password: new FormControl('', [Validators.required]),
     })
+  }
+
+  onLogin() {
+    this.router.navigate(['/login'])
   }
 
   submitData() {

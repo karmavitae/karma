@@ -8,7 +8,9 @@
         close
         </mat-icon>
     </div>
-    <img [src]="article.img" alt="" [style.width]="(isMobile|async) ? '300px' : '800px' " >
+    <img [src]="article.img" alt="" 
+    [style.width]="(isMobile|async) ? '300px' : '700px' "  
+    style="display: flex; flex-direction: row; margin-left: auto; margin-right: auto;">
     <h2>{{article.quote}}</h2> 
     @for(item of article.content; track item) {
         @switch (item.type) {
