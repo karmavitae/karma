@@ -56,16 +56,16 @@ store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })
   server.use('/user', UserRoutes);
   server.use('/obj', ObjectRoutes);
 
-server.use(express.static(__dirname + '/browser'))  
+server.use(express.static(__dirname + '/dist/browser'))  
 
 server.get('/', async (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname+ '/browser/index.html'));
+    res.sendFile(path.join(__dirname+ '/dist/browser/index.html'));
 });
 
 
 
 server.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.join(__dirname+ '/browser/index.html'));
+    res.sendFile(path.join(__dirname+ '/dist/browser/index.html'));
 });
 
 

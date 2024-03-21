@@ -1,12 +1,15 @@
 import { IExperience } from "./iexperience"
-import { IS2N } from "./igen"
+import { IResult, IS2N } from "./igen"
 import { IFacetExperience } from "./ifacet"
+import { ICvToKvResult } from "./icv"
+import { ICatalogue } from "./icatalogue"
+import { IPost, IPostRequest } from "./ipost"
 
 export interface IProfile {
     _id: any,
     user: any,
-    ksummary: any,
-    // kcatalogue: ICatalogue,
+    summary: any,
+    kcatalogue: ICatalogue,
     name: string,
     journeys:{[key:string]:IExperience[]}
     experiences:IExperience[],
@@ -28,14 +31,14 @@ export interface IProfile {
     tasks: IFacetExperience[]
     tools: IFacetExperience[]
 
-    // posts: IPost[]
-    // requests: IPostRequest[]
+    posts: IPost[]
+    requests: IPostRequest[]
 }
 
-interface IKProfileMethods {
+export interface IProfileMethods {
   resetKv(): void;
   build(): void;
-//   buildKvFromCv(cvData:ICvToKvResult):Promise<boolean>;
+  buildKvFromCv(cvData:ICvToKvResult):Promise<boolean>;
   processExperiences(experiences:IExperience[]): void;
   updateKvItems(): void;
   distributeProficiency(item: IFacetExperience): void;
@@ -44,4 +47,8 @@ interface IKProfileMethods {
   updateAbilities(): void;
   updatePotential(): void;
   addProficienciesToCatalogue(proficiencies:IFacetExperience[]): void;
+}
+
+export interface IProfileResult extends IResult {
+  data: IProfile
 }

@@ -5,6 +5,10 @@ import { send } from "./MailManager";
 import { encryptCode } from './SecretHandler'
 import crypto from 'crypto'
 import { IResult } from "../../common/interfaces/igen";
+import Profile from "../models/Profile";
+import Summary from "../models/Summary";
+import Network from "../models/Network";
+import mongoose from "mongoose";
 
 // User Regisration mails: 0-Register Interest, 1: Activation Mail, 2 Aspirant Activation , 3 Invitation on regisert interest, 4 Password reset, 5 Referee Activation
 
@@ -33,41 +37,46 @@ export async function registerUser( userData: IUserXs, mailFor:number = 0, regis
 async function createMember(userData:IUserXs, registerAs:number, mailFor:number): Promise<boolean>  {
     let result:boolean = false
     const verificationCode = getCode()
-    // const verification_digest = await encryptCode(verificationCode, 'verification')
+    const verification_digest = await encryptCode(verificationCode, 'activation')
 
-    // let kprofile = new Kprofile()
-    // let ksummary = new Ksummary()
-    // let user = new User(
-    //     {
-    //         first_name: userData.first_name,
-    //         last_name: userData.last_name,
-    //         email: userData.email,
-    //         verification_digest: verification_digest,
-    //         expires: Date.now() + (24*60*60*1000),
-    //         user_type: registerAs
-            // kprofile: kprofile._id,
-    //         // ksummary: ksummary.id
-    //     }
-    // )
-    // kprofile.user = user._id
-    // kprofile.ksummary = ksummary._id
-    // ksummary.user = user._id 
-    // ksummary.kprofile = kprofile._id
-//     const session = await mongoose.startSession()
-//     session.startTransaction()
-//     try {
-//         await user.save()
-//         // await kprofile.save()
-//         // await ksummary.save()
-//         result = await send(user.email, user.first_name, mailFor, "", "", verificationCode)
-//         await session.commitTransaction()
-//         console.log('user created successfully!')
-//     } catch (error) {
-//         await session.abortTransaction()
-//         console.log('aborted!')
-//     } finally {
-//         session.endSession()
-//     }
+    let profile = new Profile()
+    let summary = new Summary()
+    let network = new Network()
+    let user =  new User(
+        {
+            first_name: userData.first_name,
+            last_name: userData.last_name,
+            email: userData.email,
+            verification_digest: verification_digest,
+            expires: Date.now() + (24*60*60*1000),
+            user_type: registerAs,
+            profile: profile._id,
+            summary: summary.id,
+            network: network.id
+        }
+    )
+    user = mailFor === 3 ? await User.findOne({email: userData.email}) || user : user
+
+    profile.user = user._id
+    profile.summary = summary._id
+    summary.user = user._id 
+    summary.profile = profile._id
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    try {
+        await user.save()
+        await profile.save()
+        await summary.save()
+        await network.save()
+        await session.commitTransaction()
+        console.log('user created successfully!')
+    } catch (error) {
+        await session.abortTransaction()
+        console.log('aborted!')
+    } finally {
+        session.endSession()
+        result = await send(user.email, user.first_name, mailFor, "", "", verificationCode)
+    }
 
     return true
 }
@@ -79,7 +88,7 @@ export async function requestPasswordReset(email: string): Promise<IResult> {
     let result = {} as IResult
     if(verificationHash){
         let u = await Promise.resolve(User.findOne({email: email}))
-        if (u){
+        if (u && u.status > 0){
             u.is_verified = false 
             u.password_digest = ''
             u.verification_digest = verificationHash,
@@ -92,7 +101,7 @@ export async function requestPasswordReset(email: string): Promise<IResult> {
                 result = { status: 401, message: "Server Error"} 
             }
         }else {
-            result = {status: 401, message: "Invalid User Email"}
+            result = {status: 401, message:  u?.status === -1 ? "Your account is not yet activated" : "Invalid User Email"}
         } 
     } else {
         result = {status: 401, message: "Token generation error"}
@@ -145,3 +154,7 @@ export async function authenticateUser(email:string, password:string): Promise<I
     return result
     
 }
+
+
+
+

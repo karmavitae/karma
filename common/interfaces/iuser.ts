@@ -1,4 +1,7 @@
 import { IResult } from "./igen"
+import { INetwork } from "./inetwork"
+import { IProfile } from "./iprofile"
+import { ISummary } from "./isummary"
 
 export interface IUser {
     _id: any
@@ -23,8 +26,8 @@ export interface IUser {
     expires: number
 
     subscriptions:Array<any>,
-    kv: IKProfile,
-    ksummary: IKSummary,
+    profile: IProfile,
+    summary: ISummary,
     network: INetwork
 }
 
@@ -45,17 +48,8 @@ export interface IUserRegistrationResponse {
 }
 
 
-export interface IKProfile {
-    _id: any
-}
 
-export interface IKSummary {
-    _id: any
-}
 
-export interface INetwork {
-    _id: any
-}
 
 
 export interface IUserResult extends IResult {
