@@ -14,7 +14,7 @@ passport.serializeUser(function(user:any, cb) {
       cb(null, 
         { id: user._id, 
           username: user.first_name + ' ' + user.last_name,
-          userType: user.user_type,
+          user_type: user.user_type,
         });
     });
   });
@@ -27,7 +27,6 @@ passport.serializeUser(function(user:any, cb) {
 
 router.get('/valid', (req, res, next)=>{
   if(req.isAuthenticated()) {
-    console.log('checking auth status', req.isAuthenticated())
     res.status(200).json({isValid: 'true'})
   }else{
     res.status(200).send({isValid: 'false'})
@@ -45,7 +44,6 @@ passport.authenticate('local', {
         result.data = getMenuItems(req.user.user_type, req.user.first_name + ' ' + req.user.last_name)
         res.status(200).json(result)
       } else {
-        console.log('should never reach here!')
         res.status(401).json({message: 'Check your username or password'})
       }
       next()

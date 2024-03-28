@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import { registerUser, requestPasswordReset, resetPassword } from "../services/UserManager";
+import { activateUser, registerUser, requestPasswordReset, resetPassword } from "../services/UserManager";
 import { IResult } from "../../common/interfaces/igen";
+import { IUserActivation } from "../../common/interfaces/iuser";
 
 const router = express.Router()
 
@@ -13,10 +14,10 @@ router.post('/register', async(req:Request, res:Response)=>{
 })
 
 
-router.get('/activate', async(req:Request, res:Response)=>{
-    const{ email, activationCode } = req.query
-    console.log(email, activationCode)
-    res.status(200).json({status: 200, message: "Very bac"})
+router.post('/activate', async(req:Request, res:Response)=>{
+    const user:IUserActivation = req.body
+    let result = activateUser(user)
+    res.status(200).json(result)
 })
 
 router.post('/recover', async(req: Request, res: Response)=>{
@@ -29,10 +30,10 @@ router.post('/recover', async(req: Request, res: Response)=>{
 })
 
 router.post('/reset', async(req: Request, res: Response) => {
-    const{email, password} = req.body 
+    const{email, password, reset_key} = req.body 
     let result = {} as IResult
     if(password && email) {
-        result = await resetPassword(String(email), String(password))
+        result = await resetPassword(String(email), String(reset_key), String(password))
     }
     res.status(200).json(result)
 })

@@ -2,24 +2,23 @@ import express, { Express, Request, Response } from 'express';
 import InformationRoutes from './src/routes/InformationRoutes'
 import UserRoutes from './src/routes/UserRoutes'
 import AuthRoutes from './src/routes/AuthRoutes'
-import ObjectRoutes from './src/routes/ObjectRoutes'
+import WikiRoutes from './src/routes/WikiRoutes'
+import AdminRoutes from './src/routes/AdmRoutes'
 import ConnectMongoDBSession from 'connect-mongodb-session';
 import session from 'express-session';
 import passport from 'passport';
-import mongoose, { ConnectOptions } from "mongoose";
+import mongoose from "mongoose";
 import path from 'path'
-import { fileURLToPath } from 'node:url';
-import { dirname, join, resolve } from 'node:path';
+import { mex } from './src/services/MetaProvider';
 
 const server: Express = express();
 
 const port = process.env['PORT'] || 4000;
 const buildFiles = process.env['STATIC_FILES'] || '';
-const uri = process.env['MONGO_TEST_URI'] || '';
+const uri = process.env['MONGO_URI'] || '';
 
 const MongoDBStore = ConnectMongoDBSession(session)
 
- 
 mongoose.connect(uri).then(() => { 
 console.log('Connected to MongoDB');}) .catch((err) => {
 console.error('Error connecting to MongoDB:', err); });
@@ -44,17 +43,13 @@ store.on( 'error', (error)=>{ console.log(`MongodbStore Error: ${error}`) })
   server.use(passport.session())  
 
   server.use(passport.authenticate('session'))
-  server.use((req, res, next) => {
-    res.locals['isAuthenticated'] = req.isAuthenticated()
-    console.log('Session data: ', req.session, req.user)
-    console.log('user data: ', req.user)
-    console.log("Authentication status: ", req.isAuthenticated())
-    next()
-  })
+
+  server.use(mex)
   server.use('/info', InformationRoutes);
   server.use('/auth', AuthRoutes);
   server.use('/user', UserRoutes);
-  server.use('/obj', ObjectRoutes);
+  server.use('/wiki', WikiRoutes)
+  server.use('/adm', AdminRoutes)
 
 server.use(express.static(__dirname + '/dist/browser'))  
 

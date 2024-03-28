@@ -3,11 +3,15 @@ import { IFacetSalary } from "../interfaces/ifacet"
 import { IS2N } from "../interfaces/igen"
 
 export function getSpecification(specCode:number):IFacet {
-    return {_id: '65f9a14b4b6c1c8735e7f117', code: 0 , name: 'Permanent', search_label: 'Permanent'}
+    return {_id: '65f9a14b4b6c1c8735e7f117', code: 0 , 
+    class_code: 15,  category: '', status: 1,
+    name: 'Permanent', search_label: 'Permanent'}
 }
 
 export function getCommitment(commitment: number):IFacet {
-    return {_id: '65f9a14b4b6c1c8735e7f12b', code: 0 , name: 'Full Time', search_label: 'Full Time'}
+    return {_id: '65f9a14b4b6c1c8735e7f12b', code: 0 ,
+    class_code: 15,  category: '', status: 1,
+    name: 'Full Time', search_label: 'Full Time'}
 }
   
 export function getDefaultCountry():IFacet {

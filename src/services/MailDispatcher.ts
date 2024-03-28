@@ -12,7 +12,6 @@ const transporter = nodemailer.createTransport(
 )
 
 export async function deliverMail(to:string, subject:string, message:string): Promise<boolean> {
-    console.log(process.env['SMTP_PASSWORD'])
     const options = {
         from : '"Karma Vitae"<dmo@karmavitae.com>', 
         to: to, 

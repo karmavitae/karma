@@ -10,10 +10,10 @@ const verification_key = process.env['VERIFICATION_KEY'] || ''
 
 const authKeys: IS2S = { 'password' : password_key, 'activation' : activation_key, 'reset' : reset_key, 'verification' : verification_key }
 
-export async function validate(plain:string, encrypted:string, authenticationFor:string): Promise<IResult>{
-  const key = authKeys[authenticationFor]
-  return !key.trim() ? {"status" : -1, "message" : "Internal Server Key Error"} : await verifyPassword(plain, encrypted, key)
-}
+// export async function validate(plain:string, encrypted:string, authenticationFor:string): Promise<IResult>{
+//   const key = authKeys[authenticationFor]
+//   return !key.trim() ? {"status" : -1, "message" : "Internal Server Key Error"} : await verifyPassword(plain, encrypted, key)
+// }
 
 export async function encryptCode(password: string, secretFor: string): Promise<string> {
     const saltRounds = 10;
@@ -24,10 +24,11 @@ export async function encryptCode(password: string, secretFor: string): Promise<
     return encryptedCode
   }
 
-async function verifyPassword(password: string, hashedPassword: string, key: string): Promise<IResult> {
-    const isMatch = await bcrypt.compare(password + key, hashedPassword);
-    return isMatch ? {"status" : 1, "message" : "Authentication Successful"} : { "status" : 0, "message" : "Invalid Username/Password"}
-  }
+export async function verifyPassword(password: string, hashedPassword: string, keyCode: string): Promise<boolean> {
+  let key = authKeys[keyCode]
+  const isMatch = await bcrypt.compare(password + key, hashedPassword);
+  return isMatch 
+}
 
 export function getCode(): string {
   const verificationCode = crypto.randomBytes(16).toString('hex')

@@ -26,9 +26,9 @@ export interface IUser {
     expires: number
 
     subscriptions:Array<any>,
-    profile: IProfile,
-    summary: ISummary,
-    network: INetwork
+    profile: any,
+    summary: any,
+    network: any
 }
 
 export interface IUserXs {
@@ -47,7 +47,26 @@ export interface IUserRegistrationResponse {
     message: string
 }
 
+export interface IUserActivation {
+    first_name: string,
+    last_name: string,
+    date_of_birth: Date,
+    email: string,
+    user_type: number,
+   
+    mobile: string,
+    address_1: string,
+    address_2: string,
+    post_code: string,
+    city: string,
+    country: string,   
+    activation_code: string,
+    password:string
+}
 
+export interface IUserReset {
+
+}
 
 
 

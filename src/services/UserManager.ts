@@ -1,9 +1,9 @@
-import { IUser, IUserResult, IUserXs } from "../../common/interfaces/iuser";
+import { IUser, IUserActivation, IUserResult, IUserXs } from "../../common/interfaces/iuser";
 import User from "../models/User";
-import { getCode, validate } from "./SecretHandler";
+import { getCode, verifyPassword } from "./SecretHandler";
 import { send } from "./MailManager";
 import { encryptCode } from './SecretHandler'
-import crypto from 'crypto'
+import crypto, { verify } from 'crypto'
 import { IResult } from "../../common/interfaces/igen";
 import Profile from "../models/Profile";
 import Summary from "../models/Summary";
@@ -34,7 +34,7 @@ export async function registerUser( userData: IUserXs, mailFor:number = 0, regis
 }
 
 
-async function createMember(userData:IUserXs, registerAs:number, mailFor:number): Promise<boolean>  {
+export async function createMember(userData:IUserXs, registerAs:number, mailFor:number): Promise<boolean>  {
     let result:boolean = false
     const verificationCode = getCode()
     const verification_digest = await encryptCode(verificationCode, 'activation')
@@ -42,20 +42,19 @@ async function createMember(userData:IUserXs, registerAs:number, mailFor:number)
     let profile = new Profile()
     let summary = new Summary()
     let network = new Network()
-    let user =  new User(
-        {
-            first_name: userData.first_name,
-            last_name: userData.last_name,
-            email: userData.email,
-            verification_digest: verification_digest,
-            expires: Date.now() + (24*60*60*1000),
-            user_type: registerAs,
-            profile: profile._id,
-            summary: summary.id,
-            network: network.id
-        }
-    )
-    user = mailFor === 3 ? await User.findOne({email: userData.email}) || user : user
+    let user = mailFor === 3 ? await User.findOne({email: userData.email}) || new User() : new User()  
+    
+    user.first_name = user.first_name ? user.first_name : userData.first_name
+    user.last_name = user.last_name ? user.last_name : userData.last_name
+    user.email = user.email ? user.email : userData.email
+    user.is_verified = false
+    user.verification_digest = verification_digest,
+    user.expires = Date.now() + (24*60*60*1000),
+    user.user_type = registerAs,
+    user.profile = profile._id,
+    user.summary =  summary._id,
+    user.network = network._id
+        
 
     profile.user = user._id
     profile.summary = summary._id
@@ -69,16 +68,16 @@ async function createMember(userData:IUserXs, registerAs:number, mailFor:number)
         await summary.save()
         await network.save()
         await session.commitTransaction()
-        console.log('user created successfully!')
+        result=true
     } catch (error) {
         await session.abortTransaction()
-        console.log('aborted!')
+        result = false
     } finally {
         session.endSession()
         result = await send(user.email, user.first_name, mailFor, "", "", verificationCode)
     }
 
-    return true
+    return result
 }
 
 
@@ -110,13 +109,13 @@ export async function requestPasswordReset(email: string): Promise<IResult> {
     return result
 }
 
-export async function resetPassword(email: string, password:string) {
+export async function resetPassword(email: string, reset_key:string, password:string) {
     let user = await User.findOne({email: email})
     let result = {status:401, message: ''} as IResult
     if(user){
-        if(user.expires >= Date.now() && user.is_verified === false){
+        let isMatch = await verifyPassword(reset_key, user.verification_digest, 'reset')
+        if(user.expires >= Date.now() && isMatch && user.is_verified === false){
             let password_digest = await encryptCode(password, 'password')
-            console.log('>>>>>>>>>>>', password_digest)
             try {
                 await User.updateOne({email: user.email}, {$set: {
                     password_digest: password_digest,
@@ -140,19 +139,42 @@ export async function resetPassword(email: string, password:string) {
 }
 
 export async function authenticateUser(email:string, password:string): Promise<IUserResult> {
-    let result = {status: 401, message: '', data: {} as IUser} as IUserResult
+    let result = {status: 401, message: 'Invalid login ID or password', data: {} as IUser} as IUserResult
     let user = await User.findOne({email: email}, {first_name: 1, last_name: 1, user_type: 1, password_digest: 1})
     if(user && user.password_digest) {
-        let validationResult = await validate(password, user.password_digest, 'password')
-        result.message = validationResult.message
-        result.status = validationResult.status === 1 ? 200 : 401
-        result.data = validationResult.status === 1 ? user : {} as IUser
-    } 
-    else {
-        result.message = "Invalid Email or Password"
+        let isMatch = await verifyPassword(password, user.password_digest, 'password')
+        if(isMatch)  { result = {status: 200, message: 'Authentication successful', data: user}} 
     }
     return result
     
+}
+
+export async function activateUser(userData:IUserActivation): Promise<IResult> {
+    let user = await User.findOne({email: userData.email})
+    let result = {status:401, message: ''} as IResult
+    if(user){
+        let isMatch = await verifyPassword(userData.activation_code, user.verification_digest, 'activation')
+        if(user.expires >= Date.now() && isMatch && user.is_verified === false){
+            let password_digest = await encryptCode(userData.password, 'password')
+            try {
+                await User.updateOne({email: user.email}, {$set: {
+                    password_digest: password_digest,
+                    is_verified: true,
+                    verification_digest: '',
+                    expires: 0
+                }})
+                result.status = 200 
+                result.message = "Password reset successful!"
+
+            } catch (error:any) {
+                result.message = "Password Reset Failed!"
+            }
+        } else {
+            result.message = "Invalid Password Reset Link or link has expired "
+        }
+    }
+    
+    return result
 }
 
 

@@ -11,25 +11,25 @@ import Hobby from "../models/Hobby";
 import VoluntaryArea from "../models/VoluntaryArea";
 
 
-export async function facets(searchFor:string, searchIn:string): Promise<IFacet[]> {
+export async function facets(searchFor:string, searchIn:string, count:number = 10): Promise<IFacet[]> {
     let facets:IFacet[] = []
     let pipeline:any = [
         // { '$match' : {'$text' : {'$search' : searchFor}}},
         { '$match' : { '$and' : [{'class_code' : {'$gt' : 0}}, {'$text' : {'$search' : searchFor}} ]} },
         { '$project': { 'name':1, 'search_label':1, 'class_code':1, 'score_card':1, 'status':1 }},
         { '$sort' : { 'score' : {'$meta' : 'textScore'}}},
-        { '$limit' : 10 }
+        { '$limit' : count }
     ]
     switch(searchIn) {
-        case "Proficiencies" : {
+        case "proficiencies" : {
             facets = await Proficiency.aggregate(pipeline)
             break;
         }
-        case "Fields" : {
+        case "fields" : {
             facets = await Field.aggregate(pipeline)
             break;
         }
-        case "Universities" : {
+        case "universities" : {
             let uPipeline:any = [
                 // { '$match' : {'$text' : {'$search' : searchFor}}},
                 { '$match' : { '$and' : [{'class_code' : {'$gt' : 0}}, {'$text' : {'$search' : searchFor}} ]} },
@@ -40,28 +40,27 @@ export async function facets(searchFor:string, searchIn:string): Promise<IFacet[
             facets = await University.aggregate(uPipeline)
             break;
         }
-        case "Industries" : {
+        case "industries" : {
             facets = await Industry.find({},  { 'name':1, 'search_label':1 } )
             break;
         }
-        case "Academic Degrees" : {
+        case "academic Degrees" : {
             facets = await AcademicDegree.find({},  { 'name':1, 'search_label':1 } )
             break;
         }
-        case "Voluntary" : {
-            console.log(searchFor)
+        case "voluntary" : {
             facets = await VoluntaryArea.aggregate(pipeline)
             break;
         }
-        case "Hobbies" : {
+        case "hobbies" : {
             facets = await Hobby.aggregate(pipeline)
             break;
         }
-        case "Business" : {
+        case "business" : {
             facets = await BusinessArea.find({}, {'name' : 1, 'search_label' : 1, 'class_code' : 1})
             break;
         }
-        case "Countries" : {
+        case "countries" : {
             facets = await Country.find({},  { 'name':1, 'search_label':1 } )
             break
         }
@@ -85,4 +84,15 @@ export async function matchProficiencies(searchText:string, count:number) {
        ]
     let facets = await Proficiency.aggregate(pipeline)
     return facets
+}
+
+export async function createFacet() {}
+export async function createUniversity() {
+    
+}
+
+export async function createProficiency(profData:IFacet): Promise<IFacet> {
+    let proficiency = new Proficiency(profData)
+    let result:IFacet = await proficiency.save()
+    return result
 }

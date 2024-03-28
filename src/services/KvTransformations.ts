@@ -70,8 +70,7 @@ export  function domainsToCatItems(domains:IFacet[], endorsements:number, hours:
         catItem = Object.assign(catItem, domain)
         catItem.endorsements = endorsementCount
         catItem.class_code = 6
-        catItem.hours = totalHours
-        catItem.verified_hours = verifiedHours
+        catItem.hours = {total: totalHours, verified: verifiedHours}
         catItems.push(catItem)
       }
     })
@@ -104,8 +103,7 @@ export function facetToFacetExperience(
   ife = item ? Object.assign(ife,item) : ife
   ife.score_card = [],
   ife.class_code = 6,
-  ife.hours = totalHours,
-  ife.verified_hours = verifiedHours,
+  ife.hours = {total: totalHours, verified: verifiedHours}
   ife.endorsements = endorsementCount,
   ife.comfort_level = 4,
   ife.posts = [],

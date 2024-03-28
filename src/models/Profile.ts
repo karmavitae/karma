@@ -99,7 +99,7 @@ schema.method('updateKvItems', function updateKvItems(){
   this.experiences.sort((a:IExperience, b:IExperience)=> b.end_date.getTime() - a.end_date.getTime())
   Object.keys(this.kcatalogue).forEach((key)=>{
     let value = this.kcatalogue[key]
-    this.talent_matrix[getLevel(value.hours)] += 1
+    this.talent_matrix[getLevel(value.hours['total'])] += 1
     this.distributeProficiency(value)
     })
   this.updatePotential()
@@ -206,8 +206,8 @@ export default model<IProfile, ProfileModel>('Profile', schema);
 function updateCatalogueItem(catItem:IFacetExperience, proficiency: IFacetExperience): IFacetExperience {
   catItem.endorsements += proficiency.endorsements
   catItem.count = catItem.count ? catItem.count++ : 1
-  catItem.hours += proficiency.hours
-  catItem.verified_hours += proficiency.verified_hours
+  catItem.hours['total'] += proficiency.hours['total']
+  catItem.hours['verified'] += proficiency.hours['verified']
   catItem.posts = []
   catItem.posts.concat(proficiency.posts)
   catItem.comfort_level = Math.round((catItem.comfort_level + proficiency.comfort_level)/2)
@@ -224,8 +224,7 @@ async function setKcatalouge(proficiencies:string[]): Promise<ICatalogue> {
         search_label: element.search_label,
         parent: element.parent,
         class_code: element.class_code,
-        hours: 0,
-        verified_hours: 0,
+        hours: {total: 0, verified: 0},
         endorsements: 0,
         comfort_level: 3,
         posts: [],
